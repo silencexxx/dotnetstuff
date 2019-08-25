@@ -13,7 +13,7 @@ namespace DateStuff
         /// US Eastern Standard Time
         /// Central European Standard Time
         ///
-        /// note: CEST does not work using .net code on mac(!)
+        /// note: CEST does not work using .net core on mac(!)
         ///
         /// </summary>
         /// <param name="year"></param>
