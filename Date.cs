@@ -21,12 +21,7 @@ namespace DateStuff
         /// <returns></returns>
         public static DateTime GetFirstOfMonthAsUTC(int year, int month)
         {
-            var ret = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(new DateTime(year, month, 1),
-                //"Central European Standard Time", 
-                "Europe/Stockholm",
-                "UTC");
-            DateTime.SpecifyKind(ret, DateTimeKind.Utc);
-            return ret;
+            return ConvertTimeToUTC($"{year:D4}-{month:D2}-01");
         }
 
         public static IEnumerable<string> GetAllTimeZones()
@@ -45,11 +40,47 @@ namespace DateStuff
         {
             var dDate = DateTime.Parse(sDate); /* dDate gets unspecified kind - as it should be */
 
-            var ts = TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm");
+            var ts = GetSthlmTimeZone();
             
             var r = TimeZoneInfo.ConvertTimeToUtc(dDate, ts);
 
             return r;
+        }
+
+        static TimeZoneInfo ret = null;
+        public static TimeZoneInfo GetSthlmTimeZone()
+        {
+            if (ret != null)
+            {
+                return ret;
+            }
+
+            /* eur/sthlm first 
+            then cest
+             */
+            var possibleTZs = new[]{
+                "Europe/Stockholm", 
+                "Central European Standard Time"
+            };
+            
+
+            foreach (var tz in possibleTZs)
+            {
+                try
+                {
+                    ret = TimeZoneInfo.FindSystemTimeZoneById(tz);
+                }
+                catch (Exception e)
+                {
+                    /* well well */                    
+                }
+                if (ret != null)
+                {
+                    break;
+                }
+            }
+
+            return ret;
         }
     }
 }
