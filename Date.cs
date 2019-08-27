@@ -47,14 +47,8 @@ namespace DateStuff
             return r;
         }
 
-        static TimeZoneInfo ret = null;
         public static TimeZoneInfo GetSthlmTimeZone()
         {
-            if (ret != null)
-            {
-                return ret;
-            }
-
             /* eur/sthlm first 
             then cest
              */
@@ -68,19 +62,15 @@ namespace DateStuff
             {
                 try
                 {
-                    ret = TimeZoneInfo.FindSystemTimeZoneById(tz);
+                    return TimeZoneInfo.FindSystemTimeZoneById(tz);                    
                 }
                 catch (Exception e)
                 {
-                    /* well well */                    
-                }
-                if (ret != null)
-                {
-                    break;
+                    /* well well - try next then */                    
                 }
             }
 
-            return ret;
+            return null;
         }
     }
 }
