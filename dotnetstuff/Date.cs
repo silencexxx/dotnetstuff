@@ -13,7 +13,6 @@ namespace DateStuff
         /// US Eastern Standard Time
         /// Central European Standard Time
         ///
-        /// note: CEST does not work using .net core on mac(!)
         ///
         /// </summary>
         /// <param name="year"></param>
@@ -49,15 +48,32 @@ namespace DateStuff
 
         public static TimeZoneInfo GetSthlmTimeZone()
         {
-            /* eur/sthlm first 
-            then cest
+            /* 
+                eur/sthlm first 
+                then cet
              */
-            var possibleTZs = new[]{
-                "Europe/Stockholm", 
-                "Central European Standard Time"
-            };
-            
 
+            var possibleTZs = new[]{
+                "Europe/Stockholm", /* this Id has DisplayName "W. Europe Standard Time" in .net6.0 */
+                "W. Europe Standard Time", /* ... ok then try this */
+                "Central European Standard Time",
+                "Central Europe Standard Time"                
+            };
+
+            // Func<string, TimeZoneInfo> g = (tzname) => {
+            //     try {
+            //         return TimeZoneInfo.FindSystemTimeZoneById(tzname);
+            //     }
+            //     catch (Exception e)
+            //     {
+            //         Console.WriteLine(e);
+            //     }
+            //     return null;
+            // };
+
+            // var tzs = from x in possibleTZs
+            //     select g(x);
+            
             foreach (var tz in possibleTZs)
             {
                 try
